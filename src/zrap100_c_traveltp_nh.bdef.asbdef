@@ -1,0 +1,11 @@
+projection;
+strict ( 2 );
+
+define behavior for ZRAP100_C_TRAVELTP_NH alias Travel
+use etag
+
+{
+  use create;
+  use update;
+  use delete;
+}
