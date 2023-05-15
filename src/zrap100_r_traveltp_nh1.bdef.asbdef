@@ -10,9 +10,6 @@ lock master total etag LocalLastChangedAt
 authorization master( global )
 early numbering
 {
-  field ( mandatory : create )
-   TravelID;
-
   field ( readonly )
    CreatedAt,
    CreatedBy,
@@ -20,15 +17,30 @@ early numbering
    LastChangedAt,
    LastChangedBy;
 
-  field ( readonly : update )
+  field ( readonly )
    TravelID;
 
+  field ( mandatory )
+  CustomerID,
+  BeginDate,
+  EndDate;
 
   create;
-  update;
-  delete;
+  update ( features : instance );
+  delete ( features : instance );
 
-  draft action Edit;
+  determination setStatusToOpen on modify { create; }
+
+  validation validateCustomer on save { create; field CustomerID; }
+  validation validateDate on save { create; field BeginDate, EndDate; }
+
+  action ( features : instance ) deductDiscount parameter /dmo/a_travel_discount result [1] $self;
+  factory action copyTravel [1];
+
+  action ( features : instance ) acceptTravel result [1] $self;
+  action ( features : instance ) rejectTravel result [1] $self;
+
+  draft action ( features : instance ) Edit;
   draft action Activate;
   draft action Discard;
   draft action Resume;
